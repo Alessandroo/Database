@@ -1,2 +1,5 @@
 .idea/
 *.pyc
+database/application/people.json
+database/filework/example.ini
+database/utils/__init__.py

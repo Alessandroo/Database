@@ -1,4 +1,5 @@
-from database.parsing.JSON import from_json
+from database.utils.JSON import from_json
+
 
 if __name__ == '__main__':
     filename = "ex.json"

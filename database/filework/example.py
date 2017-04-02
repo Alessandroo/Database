@@ -1,4 +1,4 @@
-from database.parsing.JSON import to_json
+from database.utils.JSON import to_json
 
 
 class Ment:
