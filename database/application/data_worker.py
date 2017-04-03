@@ -1,11 +1,14 @@
+import os
 import sys
 from database.utils.profiler import Profiler
 from database.filework import fileworker
+import pickle
 
 
 def create(database, table, data):
     print("create")
     print(data)
+    data['_id'] = 1
     fileworker.write(database, table, [data])
 
 
@@ -33,14 +36,14 @@ if __name__ == '__main__':
     print("get Elem")
     with Profiler():
         print(list1[int(1e6 + 1)])
-    list2 = []
-    print("via Tuple")
-    with Profiler():
-        for i in range(int(1e7)):
-            list2.append((i, i * 10))
-    print("get Elem")
-    with Profiler():
-        print(list2[list2.index((int(1e6 + 1), int(1e6 + 1)*10))])
+    # list2 = []
+    # print("via Tuple")
+    # with Profiler():
+    #     for i in range(int(1e7)):
+    #         list2.append((i, i * 10))
+    # print("get Elem")
+    # with Profiler():
+    #     print(list2[list2.index((int(1e6 + 1), int(1e6 + 1)*10))])
 
-    print('size ' + str(sys.getsizeof(list1) / 2 ** 10))
-    print('size ' + str(sys.getsizeof(list2) / 2 ** 10))
+    print('size ' + str(sys.getsizeof(list1) / 2 ** 20))
+    # print('size ' + str(sys.getsizeof(list2) / 2 ** 10))

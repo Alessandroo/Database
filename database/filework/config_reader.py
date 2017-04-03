@@ -1,10 +1,13 @@
 import configparser
+import os
 
 
 def get_config_parameter(parameter, project='DEFAULT'):
-    print(parameter)
+    old_directory = os.getcwd()
+    os.chdir("../")
     config = configparser.ConfigParser()
     config.read('database.ini')
+    os.chdir(old_directory)
     return config[project][parameter]
 
 

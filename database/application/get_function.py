@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     data = DataStructure()
     data.function = 'create'
-    data.database = 'users'
+    data.database = 'models'
     data.collection = 'people'
     data.data = Ment("lol", 18).__dict__
     get_function(to_json(data.__dict__))
