@@ -7,8 +7,9 @@ def get_config_parameter(parameter, project='DEFAULT'):
     os.chdir("../")
     config = configparser.ConfigParser()
     config.read('database.ini')
+    data = config[project][parameter]
     os.chdir(old_directory)
-    return config[project][parameter]
+    return data
 
 
 def print_parameters(project='Default'):

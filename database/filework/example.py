@@ -19,8 +19,8 @@ if __name__ == '__main__':
 
     print(text)
 
-    with open(filename, 'w+') as file:  # a - дописать w+ писать с начала
-        for i in range(10):
+    with open(filename, 'a+') as file:  # a - дописать w+ писать с начала
+        for i in range(3):
             for index in text:
                 print("begin: " + str(file.tell()))
                 file.write('{0}\n'.format(index))

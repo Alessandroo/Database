@@ -1,0 +1,42 @@
+db.users.insert({"name": "Tom", "age": 28, languages: ["english", "spanish"]})
+db.users.find()
+db.users.renameCollection("новое_название")
+db.createCollection("accounts")
+db.users.find({name: "Tom"})
+db.users.find({languages: "german"})
+db.users.find({name: "Tom"}, {age: 1})
+db.users.find({name: "Tom"}, {age: true, _id: false})
+db.users.insert({"name": "Alex", "age": 28, company: {"name":"microsoft", "country":"USA"}})
+db.users.find({"company.name": "microsoft"})
+db.users.find().limit(3)
+db.users.find().skip(3) пропустив какое-то количество документов
+db.users.find().sort({name: 1})
+db.users.find().sort({name: 1}).skip(3).limit(3)
+db.users.find().sort({name: 1}).skip(3).limit(3)
+findOne
+db.users.count()
+db.users.find({name: "Tom"}).count()
+db.users.distinct("name") никальные различающиеся значения для одного из полей документа
+db.users.save({name: "Eugene", age : 29, languages: ["english", "german", "spanish"]})
+Более детальную настройку при обновлении предлагает функция update. Она принимает три параметра:
+
+query: принимает запрос на выборку документа, который надо обновить
+
+objNew: представляет документ с новой информацией, который заместит старый при обновлении
+
+options: определяет дополнительные параметры при обновлении документов. Может принимать два аргумента: upsert и multi.
+
+Если параметр upsert имеет значение true, что mongodb будет обновлять документ, если он найден, и создавать новый, если такого документа нет. Если же он имеет значение false, то mongodb не будет создавать новый документ, если запрос на выборку не найдет ни одного документа.
+
+Параметр multi указывает, должен ли обновляться первый элемент в выборке (используется по умолчанию, если данный параметр не указан) или же должны обновляться все документы в выборке.
+db.users.update({name : "Tom"}, {name: "Tom", age : 25, married : false}, {upsert: true})
+Для удаления отдельного ключа используется оператор $unset:
+
+> db.users.update({name : "Tom"}, {$unset: {salary: 1}})
+db.users.remove({name : "Tom"})
+Метод remove также может принимать второй необязательный параметр булевого типа, который указывает, надо удалять один элемент или все элементы, соответствующие условию. Если этот параметр равен true, то удаляется только один элемент. По умолчанию он равен false:
+
+1
+> db.users.remove({name : "Tom"}, true)
+db.users.drop()
+db.dropDatabase()

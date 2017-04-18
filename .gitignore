@@ -3,3 +3,12 @@
 database/application/people.json
 database/filework/example.ini
 database/utils/__init__.py
+database/application/data.pickle
+database/data/models/people.json
+database/data/users/people.json
+database/experiments/ex1.json
+database/data/london/people.bs
+database/data/london/people.index
+database/experiments/bson.bs
+database/experiments/ex2.bson
+database/experiments/ex2.json
