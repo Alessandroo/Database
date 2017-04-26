@@ -591,27 +591,27 @@ class BPlusTree(BTree):
 def main():
     bt = BPlusTree(4)
     l = range(55, 0, -1)
-    # bt.insert(8)
-    # bt.insert(20)
-    # bt.insert(9)
-    # bt.insert(11)
-    # bt.insert(15)
+    # bt.insert("hi", 0)
+    bt.insert(20, 0)
+    bt.insert(9, 0)
+    bt.insert(1.1, 0)
+    # bt.insert("15", 0)
 
-    # print(bt.__repr__())
+    print(bt.__repr__())
 
-    print("create")
-    with Profiler() as prof:
-        for item in range(int(1e4)):
-            bt.insert(item, 50)
+    # print("create")
+    # with Profiler() as prof:
+    #     for item in range(int(1e4)):
+    #         bt.insert(item, 50)
             # print(list(bt))
         # print("--------")
-    print(prof.total_time)
+    # print(prof.total_time)
     # print(bt.__repr__())
-    print('size ' + str(sys.getsizeof(bt) / 2 ** 10))
-    print("find")
-    with Profiler() as prof:
-        print(bt.get(5000, 1000))
-    print(prof.total_time)
+    # print('size ' + str(sys.getsizeof(bt) / 2 ** 10))
+    # print("find")
+    # with Profiler() as prof:
+    #     print(bt.get(5000, 1000))
+    # print(prof.total_time)
 
 if __name__ == '__main__':
     # unittest.main()
