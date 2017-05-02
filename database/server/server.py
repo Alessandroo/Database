@@ -1,26 +1,30 @@
-import socket
+import threading
 
-working = True
-HOST = ''
-PORT = 9090
+import zmq
 
-
-def stop():
-    working = False
+from database.application.get_function import get_function
+from database.utils.check_license import valid_license
 
 
-def start_server():
-    sock = socket.socket()
-    sock.bind((HOST, PORT))
-    sock.listen(1)
-    conn, addr = sock.accept()
-    print('Connected:', addr)
-    while True:
-        client_request = conn.recv(1024)
-        if not client_request:
-            break
-        print('Recieved message:', client_request)
-    conn.close()
+class Server(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+
+    def run(self):
+        context = zmq.Context()
+        socket = context.socket(zmq.REP)
+        socket.bind('tcp://127.0.0.1:43000')
+        while True:
+            instruction = socket.recv_string()
+            print(instruction)
+            if instruction == "stop":
+                break
+            result = get_function(instruction)
+            socket.send_string(result)
+        socket.close()
+
+
 if __name__ == '__main__':
-    while working:
-        start_server()
+    if valid_license():
+        serv = Server()
+        serv.start()

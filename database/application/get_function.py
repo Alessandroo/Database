@@ -1,12 +1,18 @@
-from database.utils.JSON import from_json, to_json
+import database.application.data_change
+import database.application.data_read
+import database.application.system_change
+
 from database.application.data_worker import get_db_functions
+from database.utils.JSON import to_json
 
 
-def get_function(json):
-    obj = from_json(json)
+def get_function(instruction):
+    # obj = from_json(json)
     function_mapper = get_db_functions()
-    result = function_mapper[obj['function']](obj['database'], obj['collection'], obj['data'])
+    result = function_mapper
+    # result = function_mapper[instruction['function']](instruction['database'], instruction['collection'], instruction['data'])
     print(result)
+    return "ok"
 
 
 if __name__ == '__main__':

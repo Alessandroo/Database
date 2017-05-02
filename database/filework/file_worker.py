@@ -3,7 +3,6 @@ import os
 import bson
 
 from database.filework.config_reader import get_config_parameter
-from database.utils.JSON import from_json
 
 
 def insert(database, table, data):
@@ -60,3 +59,7 @@ def enter_in_directory(database):
     if not os.path.exists(directory):
         os.makedirs(directory)
     os.chdir(directory)
+
+
+def enter_in_system_directory():
+    os.chdir(get_config_parameter("path"))
