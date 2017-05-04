@@ -1,15 +1,14 @@
-from database.utils.recursive_dict import RecDict
+class FunctionInfo:
+    def __init__(self, function_type, function_subtype):
+        self.function_type = function_type
+        self.function_subtype = function_subtype
 
-_FUNCTIONS = RecDict()
+_FUNCTIONS = {}
 
 
 def db_function(name, function_type, function_subtype=None):
-    print(name)
     def add(fn):
-        if function_subtype is None:
-            _FUNCTIONS[function_type][name] = fn
-        else:
-            _FUNCTIONS[function_type][function_subtype][name] = fn
+        _FUNCTIONS[name] = (fn, FunctionInfo(function_type, function_subtype))
 
     return add
 

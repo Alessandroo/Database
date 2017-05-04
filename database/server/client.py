@@ -24,10 +24,12 @@ def start_client():
     socket.connect('tcp://127.0.0.1:43000')
 
     data = DataStructure()
-    data.function = 'insert'
+    # data.function = 'insert'
+    # data.database = 'london'
+    # data.collection = 'people'
+    # data.data = [Ment("lol", 18).__dict__, Ment("lolita", 27).__dict__]
+    data.function = 'save'
     data.database = 'london'
-    data.collection = 'people'
-    data.data = [Ment("lol", 18).__dict__, Ment("lolita", 27).__dict__]
 
     socket.send_string(to_json(data))
 

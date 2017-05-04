@@ -9,10 +9,22 @@ from database.utils.JSON import to_json
 def get_function(instruction):
     # obj = from_json(json)
     function_mapper = get_db_functions()
-    result = function_mapper
+    print("function_mapper")
+    print(function_mapper)
+    print('instruction["function"]')
+    print(instruction["function"])
+    function_info = function_mapper[instruction["function"]]
+    print("function_info")
+    print(function_info)
+    # if function_info == "system":
+    #     result = function_info[0](instruction["data"])
+    #     return result.__repr__()
+    # else:
+    #     return "ok"
+    # result = function_mapper
     # result = function_mapper[instruction['function']](instruction['database'], instruction['collection'], instruction['data'])
-    print(result)
-    return "ok"
+    # (result)
+    # return "ok"
 
 
 if __name__ == '__main__':

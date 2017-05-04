@@ -16,7 +16,7 @@ def valid_license():
     enter_in_system_directory()
     invalid = False
     try:
-        with open('system.bs', 'rb') as file:
+        with open('license.bs', 'rb') as file:
             try:
                 data = bson.loads(file.read())
             except (IndexError, bson.struct.error):
@@ -35,7 +35,7 @@ def valid_license():
                 data['key'] = input("Enter license key: ")
                 invalid = True
             if invalid:
-                with open('system.bs', 'wb') as file_to_write:
+                with open('license.bs', 'wb') as file_to_write:
                     file_to_write.write(bson.dumps(data))
             return True
     except FileNotFoundError:
@@ -56,7 +56,11 @@ def check_signature(key, sign):
     except binascii.Error:
         print("The key is invalid")
         return False
-    private_key = SigningKey.from_string(private_key, curve=SECP256k1)
+    try:
+        private_key = SigningKey.from_string(private_key, curve=SECP256k1)
+    except AssertionError:
+        print("The key is invalid")
+        return False
     public_key = binascii.hexlify(private_key.get_verifying_key().to_string()).decode('utf-8')
     vk = VerifyingKey.from_string(bytes.fromhex(public_key), curve=SECP256k1)
     try:

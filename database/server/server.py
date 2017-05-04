@@ -3,6 +3,7 @@ import threading
 import zmq
 
 from database.application.get_function import get_function
+from database.utils.JSON import from_json
 from database.utils.check_license import valid_license
 
 
@@ -16,6 +17,8 @@ class Server(threading.Thread):
         socket.bind('tcp://127.0.0.1:43000')
         while True:
             instruction = socket.recv_string()
+            instruction = from_json(instruction)
+            # TODO: delete
             print(instruction)
             if instruction == "stop":
                 break

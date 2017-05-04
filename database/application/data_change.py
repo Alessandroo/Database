@@ -38,7 +38,7 @@ def insert_one(self, database, table, data):
     return to_json({"time": prof.total_time, "result": "ok"})
 
 
-@db_function("save", "changing")
+@db_function("save", "changing", "pop")
 def save():
     pass
 

@@ -29,7 +29,7 @@ class License:
     def write_signature(self):
         old_directory = os.getcwd()
         enter_in_system_directory()
-        with open("system.bs", "wb") as file:
+        with open("license.bs", "wb") as file:
             dictionary = {"signature": self.sign, "key": ""}
             file.write(bson.dumps(dictionary))
         os.chdir(old_directory)
