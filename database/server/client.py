@@ -28,8 +28,8 @@ def start_client():
     # data.database = 'london'
     # data.collection = 'people'
     # data.data = [Ment("lol", 18).__dict__, Ment("lolita", 27).__dict__]
-    data.function = 'save'
-    data.database = 'london'
+    data.function = 'createDataBase'
+    data.data = {"database" : 'poland'}
 
     socket.send_string(to_json(data))
 

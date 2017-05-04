@@ -30,8 +30,8 @@ def drop_collection():
 
 
 @db_function("createDataBase", "system")
-def create_database(data):
-    database = data["database"]
+def create_database(data_row):
+    database = data_row["database"]
     old_directory = os.getcwd()
     enter_in_system_directory()
     if os.path.isfile("system.bs"):
@@ -45,21 +45,23 @@ def create_database(data):
             if database in data:
                 os.chdir(old_directory)
                 return Answer('Database {} already exist'.format(database))
-            try:
-                os.makedirs(database)
-            except FileExistsError:
-                pass
             data[database] = {}
-            with open('system.bs', 'wb') as file_to_write:
-                file_to_write.write(bson.dumps(data))
     else:
         data = {database: {}}
-        with open('system.bs', 'wb') as file_to_write:
-            file_to_write.write(bson.dumps(data))
+    if not os.path.isdir(database):
+        if os.path.exists(database):
+            return Answer('{} already exist, but it is not directory'.format(database))
+        else:
+            os.makedirs(database)
+    with open('system.bs', 'wb') as file_to_write:
+        file_to_write.write(bson.dumps(data))
     os.chdir(old_directory)
+    print("databases")
+    print(data)
     return Answer("Operation finished")
 
 
 @db_function("dropDataBase", "system")
-def drop_database():
-    pass
+def drop_database(data_row):
+    database = data_row["database"]
+    old_directory = os.getcwd()

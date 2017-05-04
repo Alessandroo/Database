@@ -16,11 +16,13 @@ def get_function(instruction):
     function_info = function_mapper[instruction["function"]]
     print("function_info")
     print(function_info)
-    # if function_info == "system":
-    #     result = function_info[0](instruction["data"])
-    #     return result.__repr__()
-    # else:
-    #     return "ok"
+    if function_info[1].function_type == "system":
+        print('instruction["data"]')
+        print(instruction["data"])
+        result = function_info[0](instruction["data"])
+        return result.__repr__()
+    else:
+        return "ok"
     # result = function_mapper
     # result = function_mapper[instruction['function']](instruction['database'], instruction['collection'], instruction['data'])
     # (result)
