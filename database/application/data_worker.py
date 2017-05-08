@@ -1,7 +1,4 @@
-import database.application.data_change
-import database.application.data_read
-import database.application.system_change
-from database.utils.function_mapper import get_db_functions
+from database.application.function_mapper import get_db_functions
 
 if __name__ == '__main__':
     print(get_db_functions())

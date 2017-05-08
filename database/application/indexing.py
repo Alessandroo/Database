@@ -20,3 +20,5 @@ class IndexId(metaclass=SingletonByName):
     def data(self, value):
         set_indexes(self.database, self.table, value)
         self.__data = value
+
+

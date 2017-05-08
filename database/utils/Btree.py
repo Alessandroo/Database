@@ -1,9 +1,3 @@
-import sys
-
-from database.utils.profiler import Profiler
-
-__author__ = "unkonwn"
-
 import bisect
 import itertools
 import operator
@@ -509,7 +503,7 @@ class BPlusTree(BTree):
             self,
             contents=[p[0] for p in pairs],
             data=[p[1] for p in pairs])
-            for pairs in leaves]
+                  for pairs in leaves]
 
         for i in range(len(leaves) - 1):
             leaves[i].next = leaves[i + 1]
@@ -603,8 +597,8 @@ def main():
     # with Profiler() as prof:
     #     for item in range(int(1e4)):
     #         bt.insert(item, 50)
-            # print(list(bt))
-        # print("--------")
+    # print(list(bt))
+    # print("--------")
     # print(prof.total_time)
     # print(bt.__repr__())
     # print('size ' + str(sys.getsizeof(bt) / 2 ** 10))
@@ -612,6 +606,7 @@ def main():
     # with Profiler() as prof:
     #     print(bt.get(5000, 1000))
     # print(prof.total_time)
+
 
 if __name__ == '__main__':
     # unittest.main()

@@ -1,9 +1,6 @@
-import database.application.data_change
-import database.application.data_read
-import database.application.system_change
-
-from database.application.data_worker import get_db_functions
 from database.utils.JSON import to_json
+from database.application.function_mapper import get_db_functions
+from database.utils.answer import Answer
 
 
 def get_function(instruction):
@@ -13,20 +10,31 @@ def get_function(instruction):
     print(function_mapper)
     print('instruction["function"]')
     print(instruction["function"])
-    function_info = function_mapper[instruction["function"]]
+    if not instruction["function"] is None and instruction["function"] in function_mapper:
+        function_info = function_mapper[instruction["function"]]
+    else:
+        return Answer("Check command {}".format(instruction["function"])).info
     print("function_info")
     print(function_info)
     if function_info[1].function_type == "system":
         print('instruction["data"]')
         print(instruction["data"])
         result = function_info[0](instruction["data"])
-        return result.__repr__()
+        return result.info
+    elif function_info[1].function_type == "trigger":
+        result = function_info[0](instruction["database"], instruction["collection"], instruction["type"],
+                                  instruction["data"]
+                                  )
+        return result.info
+    elif function_info[1].function_type == "index":
+        result = function_info[0](instruction["database"], instruction["collection"], instruction["field"])
+        return result.info
     else:
         return "ok"
-    # result = function_mapper
-    # result = function_mapper[instruction['function']](instruction['database'], instruction['collection'], instruction['data'])
-    # (result)
-    # return "ok"
+        # result = function_mapper
+        # result = function_mapper[instruction['function']](instruction['database'], instruction['collection'], instruction['data'])
+        # (result)
+        # return "ok"
 
 
 if __name__ == '__main__':

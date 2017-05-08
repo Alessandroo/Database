@@ -26,6 +26,7 @@ if __name__ == '__main__':
          }(dict.x, dict.y)
         }
      """)
+    # ctx = execjs.compile("function f(dict){ return function add(x, y) { let c = 5; return x + y + c;}(dict.x, dict.y)}")
     # print(ctx)
     dic = {
         'x': 1,

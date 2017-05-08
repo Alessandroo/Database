@@ -14,9 +14,7 @@ class Logger(metaclass=SingletonByName):
         database[name] = self.data
 
 
-
 database = {}
-
 
 if __name__ == '__main__':
     a, b, c = Logger("apple", "aa"), Logger("banana", 15), Logger("apple", "ss")

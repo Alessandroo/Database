@@ -28,11 +28,13 @@ def start_client():
     # data.database = 'london'
     # data.collection = 'people'
     # data.data = [Ment("lol", 18).__dict__, Ment("lolita", 27).__dict__]
-    data.function = 'createDataBase'
-    data.data = {"database" : 'poland'}
+    # data.function = 'renameCollection'
+    data.function = 'dropCollection'
+    data.data = {"database": "poland", "collection": "lodz", "login": "Alex", "password": "Alex"}
+    # data.data = {"database": 'poland', 'table': {'old': 'belostock', 'new': 'belostock'}}
 
     socket.send_string(to_json(data))
-
+    # if socket.recv_string():
     print(socket.recv_string())
 
 
