@@ -12,8 +12,8 @@ _FUNCTIONS = {
     "createCollection": (system_change.create_collection, FunctionInfo("system")),
     "renameCollection": (system_change.rename_collection, FunctionInfo("system")),
     "dropCollection": (system_change.drop_collection, FunctionInfo("system")),
-    "createDataBase": (system_change.create_database, FunctionInfo("system")),
-    "dropDataBase": (system_change.drop_database, FunctionInfo("system")),
+    "createDataBase": (system_change.create_database, FunctionInfo("system", "super")),
+    "dropDataBase": (system_change.drop_database, FunctionInfo("system", "super")),
     "createTrigger": (triggers.create_trigger, FunctionInfo("trigger")),
     "deleteTrigger": (triggers.delete_trigger, FunctionInfo("trigger"))
 }

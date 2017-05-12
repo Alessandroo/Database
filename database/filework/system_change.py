@@ -83,24 +83,28 @@ def rename_collection(database, old_name, new_name, login=None, password=None, s
                             return Answer('Collections in database {} does not exist'.format(database), error=True)
                         if old_name not in data["collections"]:
                             os.chdir(old_directory)
-                            return Answer('Collection {} of database {} does not exist'.format(old_name, database), error=True)
+                            return Answer('Collection {} of database {} does not exist'.format(old_name, database),
+                                          error=True)
                         if new_name in data["collections"]:
                             os.chdir(old_directory)
-                            return Answer('Collection {} of database {} already exist'.format(new_name, database), error=True)
+                            return Answer('Collection {} of database {} already exist'.format(new_name, database),
+                                          error=True)
                         if data["collections"][old_name]:
                             for item in ["files", "indexes"]:
                                 if item in data["collections"][old_name]:
                                     if data["collections"][old_name][item]:
                                         for field, old_file_name in data["collections"][old_name][item].items():
-                                            new_file_name = "{}.bs".format(get_hash({"collection": new_name, item: field}))
+                                            new_file_name = "{}.bs".format(
+                                                get_hash({"collection": new_name, item: field}))
                                             try:
                                                 os.rename(old_file_name, new_file_name)
                                             except FileNotFoundError:
                                                 os.chdir(old_directory)
                                                 return Answer(
-                                                    'File {} of collection {} of database {} does not exist'.format(old_file_name,
-                                                                                                                    old_name,
-                                                                                                                    database),
+                                                    'File {} of collection {} of database {} does not exist'.format(
+                                                        old_file_name,
+                                                        old_name,
+                                                        database),
                                                     error=True)
                                             data["collections"][old_name][item][field] = new_file_name
                         data["collections"][new_name] = data["collections"].pop(old_name)
@@ -252,3 +256,30 @@ def drop_database(database, login, password):
         os.rmdir(database)
     os.chdir(old_directory)
     return Answer("Operation finished")
+
+
+def get_databases():
+    old_directory = os.getcwd()
+    enter_in_system_directory()
+    system_directory = os.getcwd()
+    databases = {}
+    files = os.listdir()
+    directories = filter(lambda x: os.path.isdir(x), files)
+    for directory in directories:
+        os.chdir(directory)
+        if os.path.isfile("system.bs"):
+            with open("system.bs", 'rb') as file:
+                try:
+                    data = bson.loads(file.read())
+                except (IndexError, bson.struct.error):
+                    os.chdir(system_directory)
+                    continue
+                if "name" in data:
+                    if data["name"] == directory and data["port"]:
+                        os.chdir(system_directory)
+                        databases[directory] = data["port"]
+                    else:
+                        os.chdir(system_directory)
+                        continue
+    os.chdir(old_directory)
+    return databases

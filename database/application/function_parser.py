@@ -3,7 +3,20 @@ from database.application.function_mapper import get_db_functions
 from database.utils.answer import Answer
 
 
-def get_function(instruction):
+def check_super_system_function(name):
+    function_mapper = get_db_functions()
+    function_info = function_mapper[name]
+    if function_info[1].function_type == "system" and function_info[1].function_subtype == "super":
+        return True
+    else:
+        return False
+
+
+def check_the_validity_of_the_instruction(instruction):
+    return True
+
+
+def execute_instruction(instruction):
     # obj = from_json(json)
     function_mapper = get_db_functions()
     print("function_mapper")
@@ -58,4 +71,4 @@ if __name__ == '__main__':
     data.database = 'london'
     data.collection = 'people'
     data.data = [Ment("lol", 18).__dict__, Ment("lolita", 27).__dict__]
-    get_function(to_json(data.__dict__))
+    execute_instruction(to_json(data.__dict__))
