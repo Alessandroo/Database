@@ -1,5 +1,8 @@
 import database.application.system_change as system_change
 import database.application.triggers as triggers
+# import database.application.indexing as indexing
+# import database.application.data_change as data_change
+# import database.application.data_read as data_read
 
 
 class FunctionInfo:
@@ -15,7 +18,20 @@ _FUNCTIONS = {
     "createDataBase": (system_change.create_database, FunctionInfo("system", "super")),
     "dropDataBase": (system_change.drop_database, FunctionInfo("system", "super")),
     "createTrigger": (triggers.create_trigger, FunctionInfo("trigger")),
-    "deleteTrigger": (triggers.delete_trigger, FunctionInfo("trigger"))
+    "deleteTrigger": (triggers.delete_trigger, FunctionInfo("trigger")),
+    "createIndex": (None, FunctionInfo("index")),
+    "deleteIndex": (None, FunctionInfo("index")),
+    "insert": (None, FunctionInfo("changing")),
+    "save": (None, FunctionInfo("changing")),
+    "update": (None, FunctionInfo("changing")),
+    "delete": (None, FunctionInfo("changing")),
+    "find": (None, FunctionInfo("reading")),
+    "findOne": (None, FunctionInfo("reading")),
+    "count": (None, FunctionInfo("reading")),
+    "limit": (None, FunctionInfo("reading")),
+    "skip": (None, FunctionInfo("reading")),
+    "sort": (None, FunctionInfo("reading")),
+    "distinct": (None, FunctionInfo("reading"))
 }
 
 

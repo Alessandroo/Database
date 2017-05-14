@@ -40,7 +40,8 @@ def create_database(data_row):
         return Answer("Login and password should be entered", error=True)
     login = data_row["login"]
     password = data_row["password"]
-    return system_change.create_database(database, login, password)
+    port = data_row["port"]
+    return system_change.create_database(database, login, password, port)
 
 
 def drop_database(data_row):

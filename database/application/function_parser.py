@@ -12,12 +12,20 @@ def check_super_system_function(name):
         return False
 
 
+def get_database_name(instruction):
+    function_mapper = get_db_functions()
+    function_info = function_mapper[instruction["function"]]
+    if function_info[1].function_type == "system":
+        return instruction["data"]["database"]
+    else:
+        return instruction["database"]
+
+
 def check_the_validity_of_the_instruction(instruction):
     return True
 
 
 def execute_instruction(instruction):
-    # obj = from_json(json)
     function_mapper = get_db_functions()
     print("function_mapper")
     print(function_mapper)
@@ -33,21 +41,18 @@ def execute_instruction(instruction):
         print('instruction["data"]')
         print(instruction["data"])
         result = function_info[0](instruction["data"])
-        return result.info
+        return result
     elif function_info[1].function_type == "trigger":
         result = function_info[0](instruction["database"], instruction["collection"], instruction["type"],
                                   instruction["data"]
                                   )
-        return result.info
+        return result
     elif function_info[1].function_type == "index":
         result = function_info[0](instruction["database"], instruction["collection"], instruction["field"])
-        return result.info
+        return result
     else:
-        return "ok"
-        # result = function_mapper
-        # result = function_mapper[instruction['function']](instruction['database'], instruction['collection'], instruction['data'])
-        # (result)
-        # return "ok"
+        result = function_info[0](instruction["database"], instruction["collection"], instruction["data"])
+        return result
 
 
 if __name__ == '__main__':

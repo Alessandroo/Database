@@ -178,7 +178,7 @@ def drop_collection(database, collection, login=None, password=None, system=Fals
     return Answer("Database {} does not exit or corrupted".format(database), error=True)
 
 
-def create_database(database, login, password):
+def create_database(database, login, password, port=None):
     old_directory = os.getcwd()
     enter_in_system_directory()
     if not os.path.isdir(database):
@@ -204,6 +204,8 @@ def create_database(database, login, password):
                                   error=True)
     data = {"name": database, "collections": {}, "login": login,
             "password": SHA3_512.new(password.encode('utf-8')).hexdigest()}
+    if isinstance(port, int) and 48645 <= port <= 49150:
+        data["port"] = port
     with open('system.bs', 'wb') as file_to_write:
         file_to_write.write(bson.dumps(data))
     os.chdir(old_directory)
@@ -275,7 +277,12 @@ def get_databases():
                     os.chdir(system_directory)
                     continue
                 if "name" in data:
-                    if data["name"] == directory and data["port"]:
+                    if data["name"] == directory:
+                        if "port" not in data or not data["port"]:
+                            port = enter_port(data)
+                            data["port"] = port
+                            with open('system.bs', 'wb') as file_to_write:
+                                file_to_write.write(bson.dumps(data))
                         os.chdir(system_directory)
                         databases[directory] = data["port"]
                     else:
@@ -283,3 +290,21 @@ def get_databases():
                         continue
     os.chdir(old_directory)
     return databases
+
+
+def enter_port(data):
+    try:
+        port = int(input("Database {} haven't port. Set it please! Integer should be between 48654 and 49150! ".format(
+            data["name"])))
+        if not 48645 <= port <= 49150:
+            raise ValueError
+    except ValueError:
+        print("Enter correct number of port. Integer between 48654 and 49150!")
+        return enter_port(data)
+    return port
+
+
+if __name__ == '__main__':
+    result = get_databases()
+    print(result)
+    # create_database("warsaw", "alex", "admin", 49000)

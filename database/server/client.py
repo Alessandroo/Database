@@ -1,6 +1,7 @@
 import zmq
 
 from database.utils.JSON import to_json
+from database.utils.profiler import Profiler
 
 
 class Ment:
@@ -39,7 +40,7 @@ def start_client():
 
 
 if __name__ == '__main__':
-    start_client()
+    # start_client()
 
     # if __name__ == '__main__':
     #     class Ment:
@@ -69,3 +70,47 @@ if __name__ == '__main__':
     #     while True:
     #         socket_server.send(receive_data)
     #     socket_server.close()
+    context = zmq.Context()
+    socket = context.socket(zmq.REQ)
+    # identity = 'worker-10'
+    # socket.identity = identity.encode('utf-8')
+    socket.connect('tcp://localhost:50000')
+    # poll = zmq.Poller()
+    # poll.register(socket, zmq.POLLIN)
+    data = DataStructure()
+    data.function = 'createDataBase'
+    data.database = 'warsaw'
+    data.data = {"database": "madrid", "collection": "lodz", "login": "Alex", "password": "Alex", "port": 48710}
+    # datas = to_json(data)
+    # print(datas)
+    print(to_json(data))
+    with Profiler() as prof:
+        socket.send_string(to_json(data))
+        msg = socket.recv_string()
+        # for i in range(1000):
+        #     socket.send_string(to_json(data))
+        #     msg = socket.recv_string()
+    print(prof.total_time)
+    # sockets = dict(poll.poll(1000))
+    # if socket in sockets:
+    #     msg = socket.recv_string()
+    #     print(msg)
+    socket.send_string(to_json(data))
+    print("sent")
+    msg = socket.recv_string()
+    print(msg)
+    # socket.recv_json()
+    # print(socket.recv_string())
+    # reqs = 0
+    # while True:
+    #     reqs = reqs + 1
+    #     print('Req #%d sent..' % (reqs))
+    #     socket.send_string(u'request #%d' % (reqs))
+    #     for i in range(5):
+    #         sockets = dict(poll.poll(1000))
+    #         if socket in sockets:
+    #             msg = socket.recv()
+    #             tprint('Client %s received: %s' % (identity, msg))
+
+    socket.close()
+    context.term()

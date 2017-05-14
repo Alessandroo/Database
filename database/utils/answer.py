@@ -1,17 +1,14 @@
 class Answer:
     def __init__(self, info, time=None, error=False):
-        self._info = info
-        self._time = time
-        self._error = error
+        self.info = info
+        self.time = time
+        self.error = error
+        self._value = None
 
     @property
-    def time(self):
-        return self._time
+    def value(self):
+        return self._value
 
-    @property
-    def info(self):
-        return self._info
-
-    @property
-    def error(self):
-        return self._error
+if __name__ == '__main__':
+    property_names = [p for p in dir(Answer) if isinstance(getattr(Answer, p), property)]
+    print(property_names)

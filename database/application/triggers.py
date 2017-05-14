@@ -112,14 +112,15 @@ def create_trigger(database, collection, type_trigger, data):
             field = data["field"]
             return triggers.create_auto_increment_trigger(database, collection, field)
         elif type_trigger == "custom":
+            name = data["name"]
             situation = data["situation"]
             parameters = data["parameters"]
             code = data["code"]
             if data["action"]:
                 action = data["action"]
-                return triggers.create_custom_trigger(database, collection, situation, parameters, code, action)
+                return triggers.create_custom_trigger(name, database, collection, situation, parameters, code, action)
             else:
-                return triggers.create_custom_trigger(database, collection, situation, parameters, code)
+                return triggers.create_custom_trigger(name, database, collection, situation, parameters, code)
         elif type_trigger == "constraint":
             field = data["field"]
             parent_collection = data["parent"]["collection"]
@@ -140,7 +141,11 @@ def create_trigger(database, collection, type_trigger, data):
 
 
 def delete_trigger(database, collection, type_trigger, data):
-    pass
+    if type_trigger == "custom":
+        name = data["name"]
+    else:
+        name = None
+    return triggers.delete_trigger(database, collection, type_trigger, name)
 
 
 if __name__ == '__main__':

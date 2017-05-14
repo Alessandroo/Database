@@ -15,7 +15,7 @@ def create_auto_increment_trigger(database, collection, field):
     pass
 
 
-def create_custom_trigger(database, collection, situation, parameters, code, action=None):
+def create_custom_trigger(name, database, collection, situation, parameters, code, action=None):
     pass
 
 
@@ -48,4 +48,14 @@ def create_check_type_trigger(database, collection, field, types_of_object):
 
 
 def create_not_null_trigger(database, collection, field):
+    pass
+
+
+def delete_trigger(database, collection, type_trigger, name):
+    pass
+
+def read_db_file(database, collection):
+    pass
+
+def write_db_file(database, collection):
     pass
