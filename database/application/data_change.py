@@ -1,10 +1,9 @@
-from database.application.indexing import IndexId
+from database.application.indexing_id import IndexId
 from database.filework import file_worker
 from database.utils.JSON import to_json
 from database.utils.profiler import Profiler
 
 
-@db_function("insert", "changing")
 def insert(database, table, data):
     with Profiler() as prof:
         index = IndexId(database, table)
@@ -22,7 +21,6 @@ def insert(database, table, data):
     return to_json({"time": prof.total_time, "result": "ok"})
 
 
-@db_function("insertOne", "changing")
 def insert_one(self, database, table, data):
     with Profiler() as prof:
         index = IndexId(database, table)
@@ -37,18 +35,15 @@ def insert_one(self, database, table, data):
     return to_json({"time": prof.total_time, "result": "ok"})
 
 
-@db_function("save", "changing", "pop")
 def save():
     pass
 
 
-@db_function("update", "changing")
 def update(database, table, data):
     print("update")
     print(data)
 
 
-@db_function("remove", "changing")
 def delete(database, table, data):
     print("delete")
     print(data)

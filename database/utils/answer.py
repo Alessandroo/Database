@@ -9,6 +9,7 @@ class Answer:
     def value(self):
         return self._value
 
+
 if __name__ == '__main__':
     property_names = [p for p in dir(Answer) if isinstance(getattr(Answer, p), property)]
     print(property_names)

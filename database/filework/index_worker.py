@@ -2,7 +2,7 @@ import os
 import pickle
 
 from database.filework.file_worker import enter_in_directory
-from database.utils.exeptions import IndexNotExist
+from database.utils.exceptions import IndexNotExist
 
 
 def get_indexes(database, table):
@@ -29,6 +29,6 @@ def set_indexes(database, table, data):
 
 
 if __name__ == '__main__':
-    # set_indexes("users", {0: 0})
+    set_indexes("users", {0: 0})
     d = get_indexes("london", "people")
     print(d)

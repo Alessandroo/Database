@@ -1,6 +1,4 @@
 import bisect
-import itertools
-import operator
 
 
 class _BNode:
@@ -338,6 +336,16 @@ class BTree:
         recurse(self._root, accum, 0)
         return "\n".join(accum)
 
+    def max_element(self):
+        def recurse(node):
+            if getattr(node, "children", []):
+                print(getattr(node, "children"))
+                return recurse(getattr(node, "children", [])[-1])
+            else:
+                print(node)
+                return getattr(node, "tree")
+        return recurse(self._root)
+
     @classmethod
     def bulkload(cls, items, order):
         tree = object.__new__(cls)
@@ -462,15 +470,16 @@ class BPlusTree(BTree):
             node = node.children[0]
 
         while node:
-            for pair in itertools.izip(node.contents, node.data):
+            print(dir(node))
+            for pair in node.data:
                 yield pair
             node = node.next
 
     def iterkeys(self):
-        return itertools.imap(operator.itemgetter(0), self.iteritems())
+        return list(map(lambda x: x[0], self.iteritems()))
 
     def itervalues(self):
-        return itertools.imap(operator.itemgetter(1), self.iteritems())
+        return list(map(lambda x: x[1], self.iteritems()))
 
     __iter__ = iterkeys
 
@@ -588,7 +597,7 @@ def main():
     # bt.insert("hi", 0)
     bt.insert(20, 0)
     bt.insert(9, 0)
-    bt.insert(1.1, 0)
+    bt.insert(1.1, 5)
     # bt.insert("15", 0)
 
     print(bt.__repr__())

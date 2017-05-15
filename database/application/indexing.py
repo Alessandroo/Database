@@ -1,24 +1,57 @@
-from database.filework.index_worker import get_indexes, set_indexes
-from database.utils.exeptions import IndexNotExist
-from database.utils.singleton import SingletonByName
+from database.filework.indexing import create_btree_index, create_unique_index
+from database.filework.triggers import read_db_file, write_db_file
+from database.utils.answer import Answer
+from database.utils.exceptions import DatabaseNotExist
 
 
-class IndexId(metaclass=SingletonByName):
-    def __init__(self, database, table):
-        self.database = database
-        self.table = table
+def create_index(database, collection, field, data=None):
+    if not data:
         try:
-            self.__data = get_indexes(database, table)
-        except IndexNotExist:
-            self.__data = {}
+            data = read_db_file(database)
+        except DatabaseNotExist as e:
+            return Answer(e.__str__(), error=True)
+    if data["collections"] and collection in data["collections"]:
+        if data["collections"][collection]["triggers"]:
+            if data["collections"][collection]["triggers"]["auto increment"] and \
+                    data["collections"][collection]["triggers"]["auto increment"][field]:
+                result = create_unique_index(database, collection, field, data, ("int",))
+                if result.error:
+                    data["collections"][collection]["triggers"]["auto increment"].pop(field)
+                    write_db_file(database, data)
+                    return result
+                return result
 
-    @property
-    def data(self):
-        return self.__data
+            if data["collections"][collection]["triggers"]["unique"] and \
+                    data["collections"][collection]["triggers"]["unique"][field]:
+                if data["collections"][collection]["triggers"]["check type"] and \
+                        data["collections"][collection]["triggers"]["check type"][field]:
+                    result = create_unique_index(database, collection, field, data,
+                                                 data["collections"][collection]["triggers"]["check type"][field])
+                else:
+                    result = create_unique_index(database, collection, field, data)
+                if result.error:
+                    data["collections"][collection]["triggers"]["unique"].pop(field)
+                    write_db_file(database, data)
+                    return result
+                return result
 
-    @data.setter
-    def data(self, value):
-        set_indexes(self.database, self.table, value)
-        self.__data = value
+            if data["collections"][collection]["triggers"]["check type"] and \
+                    data["collections"][collection]["triggers"]["check type"][field]:
+                if {"string", "float", "int", "bool"}.isdisjoint(
+                        set(data["collections"][collection]["triggers"]["check type"][field])):
+                    return Answer('Indexing of field {} of collection {} in database {} is no use',
+                                  error=True)
+
+        return create_btree_index(database, collection, field, data)
+    else:
+        return Answer('Collection {} of database {} does not exist'.format(collection, database),
+                      error=True)
 
 
+def delete_index(database, collection, field, data=None):
+    if not data:
+        try:
+            data = read_db_file(database)
+        except DatabaseNotExist as e:
+            return Answer(e.__str__(), error=True)
+    return delete_index(database, collection, field, data)
