@@ -51,3 +51,7 @@ def drop_database(data_row):
     login = data_row["login"]
     password = data_row["password"]
     return system_change.drop_database(database, login, password)
+
+if __name__ == '__main__':
+    print(create_database({"database": "warsaw", "login": "alex", "password": "admin", "port": 49980}).info)
+    print(create_collection({"database": "warsaw", "collection": "lodz", "login": "alex", "password": "admin"}).info)

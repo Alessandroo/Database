@@ -5,6 +5,8 @@ from database.utils.profiler import Profiler
 
 
 def insert(database, table, data):
+    if not isinstance(data, (list, tuple)) or len(data == 1):
+        return insert_one(database, table, data)
     with Profiler() as prof:
         index = IndexId(database, table)
         _id = 0
@@ -21,7 +23,7 @@ def insert(database, table, data):
     return to_json({"time": prof.total_time, "result": "ok"})
 
 
-def insert_one(self, database, table, data):
+def insert_one(database, table, data):
     with Profiler() as prof:
         index = IndexId(database, table)
         _id = 0

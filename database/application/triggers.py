@@ -103,51 +103,68 @@ class Trigger:
         return self._not_null
 
 
-def create_trigger(database, collection, type_trigger, data):
+def create_trigger(database, collection, type_trigger, data_row, data):
     if type_trigger in ["unique", "auto increment", "custom", "constraint", "check type", "not null"]:
         if type_trigger == "unique":
-            field = data["field"]
-            return triggers.create_unique_trigger(database, collection, field)
+            field = data_row["field"]
+            return triggers.create_unique_trigger(database, collection, field, data=data)
         elif type_trigger == "auto increment":
-            field = data["field"]
-            return triggers.create_auto_increment_trigger(database, collection, field)
+            field = data_row["field"]
+            return triggers.create_auto_increment_trigger(database, collection, field, data=data)
         elif type_trigger == "custom":
-            name = data["name"]
-            situation = data["situation"]
-            parameters = data["parameters"]
-            code = data["code"]
-            if data["action"]:
-                action = data["action"]
-                return triggers.create_custom_trigger(name, database, collection, situation, parameters, code, action)
+            name = data_row["name"]
+            situation = data_row["situation"]
+            parameters = data_row["parameters"]
+            code = data_row["code"]
+            if data_row["action"]:
+                actions = data_row["actions"]
+                actions_on_true = None
+                actions_on_false = None
+                if actions["on true"]:
+                    actions_on_true = actions["on true"]
+                if actions["on false"]:
+                    actions_on_false = actions["on false"]
+                return triggers.create_custom_trigger(name, database, collection, situation, parameters, code,
+                                                      actions_on_true=actions_on_true,
+                                                      actions_on_false=actions_on_false,
+                                                      data=data)
             else:
-                return triggers.create_custom_trigger(name, database, collection, situation, parameters, code)
+                return triggers.create_custom_trigger(name, database, collection, situation, parameters, code,
+                                                      data=data)
         elif type_trigger == "constraint":
-            field = data["field"]
-            parent_collection = data["parent"]["collection"]
-            parent_field = data["parent"]["field"]
-            return triggers.create_constraint_trigger(database, collection, field, parent_collection, parent_field)
+            name = data_row["name"]
+            field = data_row["field"]
+            parent_collection = data_row["parent"]["collection"]
+            parent_field = data_row["parent"]["field"]
+            return triggers.create_constraint_trigger(name, database, collection, field, parent_collection,
+                                                      parent_field, data=data)
         elif type_trigger == "check type":
             valid_types = ["object", "string", "float", "int", "array", "bool"]
-            field = data["field"]
-            types_of_object = data["object types"]
+            field = data_row["field"]
+            types_of_object = data_row["object types"]
             if set(types_of_object) <= set(valid_types):
-                pass
-            return triggers.create_check_type_trigger(database, collection, field, types_of_object)
-        else:
-            field = data["field"]
-            return triggers.create_not_null_trigger(database, collection, field)
-    else:
-        return Answer("Invalid query", error=True)
+                return triggers.create_check_type_trigger(database, collection, field, types_of_object, data=data)
+        elif type_trigger == "not null":
+            field = data_row["field"]
+            return triggers.create_not_null_trigger(database, collection, field, data=data)
+    return Answer("Invalid query", error=True)
 
 
-def delete_trigger(database, collection, type_trigger, data):
+def delete_trigger(database, collection, type_trigger, data_row, data):
     if type_trigger == "custom":
-        name = data["name"]
+        name = data_row["name"]
+        situation = data_row["situation"]
+    elif type_trigger == "constraint":
+        name = data_row["name"]
+        situation = None
     else:
         name = None
-    return triggers.delete_trigger(database, collection, type_trigger, name)
+        situation = None
+    field = data_row["field"]
+    return triggers.delete_trigger(database, collection, type_trigger, field, name, situation, data)
 
 
 if __name__ == '__main__':
-    trig = Trigger()
-    print(trig.__dict__)
+    data = triggers.read_db_file("warsaw")
+    print(data)
+    print(create_trigger("warsaw", "lodz", "not null", {"field": "name"},data))
